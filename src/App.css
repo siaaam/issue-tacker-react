@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Recursive:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Recursive', sans-serif !important;
+}
+.issue-brand {
+  font-family: 'Lobster', sens-serif;
+  font-size: 1.5rem !important;
+  margin-right: auto !important;
+}
