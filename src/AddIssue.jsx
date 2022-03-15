@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import { v4 as uuid } from 'uuid';
 
-const AddIssue = () => {
-  const [issue, setIssue] = useState({
-    title: '',
-    subTitle: '',
-    assignTo: '',
-    startDate: '',
-    endDate: '',
-    priority: 'high',
-    status: 'new',
-    completeInPercent: '20',
-  });
+const defaultIssue = {
+  title: '',
+  subTitle: '',
+  assignTo: '',
+  startDate: '',
+  endDate: '',
+  priority: 'high',
+  status: 'new',
+  completeInPercent: '20',
+};
+
+const AddIssue = ({ addIssue }) => {
+  const [issue, setIssue] = useState(defaultIssue);
 
   const [errors, setErrors] = useState({
     title: '',
@@ -79,7 +82,12 @@ const AddIssue = () => {
 
     if (isValid) {
       // form submission
-      console.log(issue);
+      addIssue({
+        ...issue,
+        id: uuid(),
+      });
+      // reset form
+      setIssue(defaultIssue);
     }
   };
 
