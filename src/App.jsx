@@ -20,7 +20,7 @@ function App() {
       endDate: '',
       priority: 'high',
       status: 'new',
-      completeInPercent: '20',
+      completeInPercent: '70',
     },
   ]);
 
@@ -37,7 +37,7 @@ function App() {
     if (issue.status === 'new') {
       setNewCount((prevCount) => prevCount + 1);
     }
-    qqqa;
+
     if (issue.status === 'inProgress') {
       setProgressCount((prevCount) => prevCount + 1);
     }

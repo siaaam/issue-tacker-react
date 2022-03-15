@@ -1,4 +1,4 @@
-import { Table, Badge } from 'react-bootstrap';
+import { Table, Badge, ProgressBar } from 'react-bootstrap';
 import { FaTrashAlt, FaEdit, FaCheckSquare } from 'react-icons/fa';
 
 const Issues = ({ issues }) => {
@@ -19,28 +19,57 @@ const Issues = ({ issues }) => {
           </tr>
         </thead>
         <tbody>
-          {issues.map((issue) => (
-            <tr key={issue.id}>
-              <td>{issue.id}</td>
-              <td>{issue.title}</td>
-              <td>{issue.priority}</td>
-              <td>
-                <Badge bg="primary" pill>
-                  {issue.status}
-                </Badge>
-              </td>
-              <td>{issue.endDate}</td>
-              <td>{issue.assignTo}</td>
-              <td>{issue.completeInPercent}%</td>
-              <td>
-                <div className="d-flex justify-content-between">
-                  <FaEdit className="text-info" />
-                  <FaCheckSquare className="text-success" />
-                  <FaTrashAlt className="text-primary" />
-                </div>
-              </td>
-            </tr>
-          ))}
+          {issues.map((issue) => {
+            const {
+              id,
+              title,
+              priority,
+              status,
+              endDate,
+              assignTo,
+              completeInPercent,
+            } = issue;
+
+            const lowClass = priority === 'low' ? 'primary' : '';
+            const highClass = priority === 'high' ? 'danger' : '';
+            const mediumClass = priority === 'medium' ? 'info' : '';
+
+            const lowPercentageClass = completeInPercent < 30 ? 'danger' : '';
+            const mediumPercentageClass =
+              completeInPercent > 30 && completeInPercent <= 70 ? 'info' : '';
+            const highPercentageClass = completeInPercent > 70 ? 'success' : '';
+
+            return (
+              <tr key={issue.id}>
+                <td>{id}</td>
+                <td>{title}</td>
+                <td>
+                  <Badge bg={`${lowClass}${mediumClass}${highClass}`} pill>
+                    {priority}
+                  </Badge>
+                </td>
+                <td>{status}</td>
+                <td>{endDate}</td>
+                <td>{assignTo}</td>
+                <td>
+                  <ProgressBar
+                    variant={`${highPercentageClass}${lowPercentageClass}${mediumPercentageClass}`}
+                    label={completeInPercent}
+                    now={completeInPercent}
+                    striped
+                    animated
+                  />
+                </td>
+                <td>
+                  <div className="d-flex justify-content-between">
+                    <FaEdit className="text-info" />
+                    <FaCheckSquare className="text-success" />
+                    <FaTrashAlt className="text-primary" />
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </>

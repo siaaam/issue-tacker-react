@@ -7,8 +7,11 @@ const Navigation = () => {
           <Navbar.Brand className="issue-brand" href="#home">
             Issue Tracker
           </Navbar.Brand>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="justify-content-end"
+          >
+            <Nav>
               <Nav.Link href="#home">Home</Nav.Link>
               <Nav.Link href="#link">Issues</Nav.Link>
             </Nav>
