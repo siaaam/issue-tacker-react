@@ -8,6 +8,7 @@ import AddIssue from './AddIssue';
 import Issues from './Issues';
 import Home from './Home';
 import NotFound from './NotFound';
+import EditIssue from './EditIssue';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -74,11 +75,27 @@ function App() {
     setIssues(issuesAfterDlt);
   };
 
+  const updateIssue = (issueToUpdate) => {
+    const issuesAfterUpdate = issues.map((issue) => {
+      if (issue.id === issueToUpdate.id) {
+        return {
+          ...issueToUpdate,
+          id: issue.id,
+          status:
+            issueToUpdate.completeInPercent < 100 ? 'inProgress' : 'completed',
+        };
+      } else {
+        return issue;
+      }
+    });
+    setIssues(issuesAfterUpdate);
+  };
+
   return (
     <>
       <ToastContainer
         position="bottom-left"
-        autoClose={1000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -93,6 +110,12 @@ function App() {
               <Routes>
                 <Route path="/" index element={<Home />} />
                 <Route path="/add" element={<AddIssue addIssue={addIssue} />} />
+                <Route
+                  path="/edit/:id"
+                  element={
+                    <EditIssue issues={issues} updateIssue={updateIssue} />
+                  }
+                />
                 <Route
                   path="/issues"
                   element={

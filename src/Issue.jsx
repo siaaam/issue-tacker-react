@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Badge, ProgressBar, Modal, Button } from 'react-bootstrap';
 import { FaTrashAlt, FaEdit, FaCheckSquare } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Issue = ({ issue, completeIssue, deleteIssue }) => {
   const { id, title, priority, status, endDate, assignTo, completeInPercent } =
     issue;
 
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = (e) => {
     if (e.target.dataset.action === 'delete') {
@@ -74,7 +76,10 @@ const Issue = ({ issue, completeIssue, deleteIssue }) => {
         </td>
         <td>
           <div className="d-flex justify-content-between">
-            <FaEdit className="text-info" />
+            <FaEdit
+              onClick={() => navigate(`/edit/${id}`)}
+              className="text-info"
+            />
             <FaCheckSquare
               className="text-success"
               onClick={() => completeIssue(id)}
