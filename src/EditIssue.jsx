@@ -15,7 +15,7 @@ const defaultIssue = {
   completeInPercent: '20',
 };
 
-const EditIssue = ({ addIssue, issues, updateIssue }) => {
+const EditIssue = ({ issues, updateIssue }) => {
   const [issue, setIssue] = useState(defaultIssue);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -120,6 +120,7 @@ const EditIssue = ({ addIssue, issues, updateIssue }) => {
     status,
     completeInPercent,
   } = issue;
+
   const {
     title: errorTitle,
     subTitle: errorSubtitle,
@@ -127,6 +128,7 @@ const EditIssue = ({ addIssue, issues, updateIssue }) => {
     startDate: errorStartDate,
     endDate: errorEndDate,
   } = errors;
+
   return (
     <>
       <h1 className="mt-4 mb-4">Edit Issue</h1>
