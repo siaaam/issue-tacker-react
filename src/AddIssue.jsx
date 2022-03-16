@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const defaultIssue = {
   title: '',
@@ -23,7 +25,7 @@ const AddIssue = ({ addIssue }) => {
     startDate: '',
     endDate: '',
   });
-
+  const navigate = useNavigate();
   // dealing with HANDLE CHANGE event handler
 
   const handleChange = (e) => {
@@ -86,8 +88,11 @@ const AddIssue = ({ addIssue }) => {
         ...issue,
         id: uuid(),
       });
+      navigate('/issues');
+      toast.success('Issue added successfully');
+
       // reset form
-      setIssue(defaultIssue);
+      // setIssue(defaultIssue);
     }
   };
 
