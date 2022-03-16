@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 const IssueBar = ({ totalCount, newCount, progressCount, completedCount }) => {
   return (
-    <Row className="mt-4">
+    <Row className="mt-4 mb-4">
       <Col>
         <span>Total:</span> {totalCount}
       </Col>

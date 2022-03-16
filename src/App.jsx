@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Navigation from './Navigation';
 import AddIssue from './AddIssue';
-import IssueBar from './IssueBar';
 import Issues from './Issues';
+import Home from './Home';
+import NotFound from './NotFound';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [issues, setIssues] = useState([
@@ -45,22 +49,69 @@ function App() {
       setCompletedCount((prevCount) => prevCount + 1);
     }
   };
+
+  const completeIssue = (id) => {
+    // find the issue based on id  and modify as  necessary
+
+    const issuesAfterCompletion = issues.map((issue) => {
+      if (issue.id === id) {
+        return {
+          ...issue,
+          status: 'completed',
+          completeInPercent: '100',
+        };
+      } else {
+        return issue;
+      }
+    });
+
+    setIssues(issuesAfterCompletion);
+  };
+
+  const deleteIssue = (id) => {
+    // filter issue by id
+    const issuesAfterDlt = issues.filter((issue) => issue.id !== id);
+    setIssues(issuesAfterDlt);
+  };
+
   return (
     <>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+      />
+
       <Row>
-        <Navigation />
-        <Col sm={{ span: 9, offset: 1 }}>
-          <Container>
-            <AddIssue addIssue={addIssue} />
-            <IssueBar
-              totalCount={totalCount}
-              newCount={newCount}
-              progressCount={progressCount}
-              completedCount={completedCount}
-            />
-            <Issues issues={issues} />
-          </Container>
-        </Col>
+        <BrowserRouter>
+          <Navigation />
+          <Col sm={{ span: 9, offset: 1 }}>
+            <Container>
+              <Routes>
+                <Route path="/" index element={<Home />} />
+                <Route path="/add" element={<AddIssue addIssue={addIssue} />} />
+                <Route
+                  path="/issues"
+                  element={
+                    <Issues
+                      issues={issues}
+                      totalCount={totalCount}
+                      newCount={newCount}
+                      progressCount={progressCount}
+                      completedCount={completedCount}
+                      completeIssue={completeIssue}
+                      deleteIssue={deleteIssue}
+                    />
+                  }
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Container>
+          </Col>
+        </BrowserRouter>
       </Row>
     </>
   );
