@@ -331,7 +331,7 @@ const EditIssue = ({ issues, updateIssue }) => {
 
           <Col sm={1}>{completeInPercent}%</Col>
         </Form.Group>
-        <div className="mt-4">
+        <div className="mt-4 buttons">
           <Button variant="warning" className="me-4" type="submit">
             Update
           </Button>
