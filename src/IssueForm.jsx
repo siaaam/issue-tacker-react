@@ -4,6 +4,10 @@ import { v4 as uuid } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import DatePicker from 'react-datepicker';
+import { addDays } from 'date-fns';
+import 'react-datepicker/dist/react-datepicker.css';
+
 // const defaultIssue = {
 //   title: '',
 //   subTitle: '',
@@ -20,8 +24,8 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
     title: '',
     subTitle: '',
     assignTo: '',
-    startDate: '',
-    endDate: '',
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
     priority: 'high',
     status: 'new',
     completeInPercent: '20',
@@ -228,14 +232,23 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
           </Col>
 
           <Col sm={3}>
-            <Form.Control
+            <DatePicker
               type="date"
-              onChange={handleChange}
+              selected={startDate}
+              onChange={(date) =>
+                setIssue({
+                  ...issue,
+                  startDate: date,
+                })
+              }
               name="startDate"
+              startDate={startDate}
+              endDate={endDate}
+              minDate={new Date()}
               value={startDate}
-              placeholder="Enter Start Date"
               isInvalid={errorStartDate}
-            ></Form.Control>
+              selectsStart
+            />
             <Form.Control.Feedback type="invalid" className="d-block">
               {errorStartDate}
             </Form.Control.Feedback>
@@ -249,14 +262,24 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
                 </Form.Label>
               </Col>
               <Col sm={9}>
-                <Form.Control
+                <DatePicker
                   type="date"
-                  onChange={handleChange}
+                  selected={endDate}
+                  onChange={(date) =>
+                    setIssue({
+                      ...issue,
+                      endDate: date,
+                    })
+                  }
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
                   name="endDate"
                   value={endDate}
                   placeholder="Enter End Date"
                   isInvalid={errorEndDate}
-                ></Form.Control>
+                  selectsEnd
+                />
                 <Form.Control.Feedback type="invalid" className="d-block">
                   {errorEndDate}
                 </Form.Control.Feedback>
