@@ -7,6 +7,9 @@ import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import { addDays } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
+import TextInput from './formInputs/TextInput';
+import DateInput from './formInputs/DateInput';
+import CheckInput from './formInputs/CheckInput';
 
 // const defaultIssue = {
 //   title: '',
@@ -164,65 +167,36 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
     <>
       <h1 className="mt-4 mb-4">{issueToEdit ? 'Edit Issue' : 'Add Issue'}</h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} className="mb-3">
-          <Col sm={3}>
-            <Form.Label column>Title</Form.Label>
-          </Col>
-          <Col sm={9}>
-            <Form.Control
-              type="text"
-              id="title"
-              name="title"
-              onChange={handleChange}
-              value={title}
-              placeholder="Enter Your Issue"
-              isInvalid={errorTitle}
-            />
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errorTitle}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
+        <TextInput
+          label="Title"
+          type="text"
+          name="title"
+          onChange={handleChange}
+          value={title}
+          placeholder="Enter Your Issue"
+          error={errorTitle}
+        />
 
-        <Form.Group as={Row} className="mb-3">
-          <Col sm={3}>
-            <Form.Label column>Sub Title</Form.Label>
-          </Col>
-          <Col sm={9}>
-            <Form.Control
-              as="textarea"
-              id="subTitle"
-              name="subTitle"
-              onChange={handleChange}
-              value={subTitle}
-              placeholder="Enter Your Issue Details"
-              isInvalid={errorSubtitle}
-            />
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errorSubtitle}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
+        <TextInput
+          label="Sub Title"
+          type="text"
+          name="subTitle"
+          onChange={handleChange}
+          value={subTitle}
+          placeholder="Enter Your Issue Details"
+          error={errorSubtitle}
+          as="textarea"
+        />
 
-        <Form.Group as={Row} className="mb-3">
-          <Col sm={3}>
-            <Form.Label column>Assign To</Form.Label>
-          </Col>
-          <Col sm={9}>
-            <Form.Control
-              type="text"
-              id="assignTo"
-              name="assignTo"
-              onChange={handleChange}
-              value={assignTo}
-              placeholder="Enter Whom Assign To"
-              isInvalid={assignToErr}
-            />
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {assignToErr}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
+        <TextInput
+          label="Assign To"
+          type="text"
+          name="assignTo"
+          onChange={handleChange}
+          value={assignTo}
+          placeholder="Enter Name Whom You Have Assign To"
+          error={assignToErr}
+        />
 
         <Form.Group as={Row} className="mb-3">
           <Col sm={3}>
@@ -232,8 +206,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
           </Col>
 
           <Col sm={3}>
-            <DatePicker
-              type="date"
+            <DateInput
               selected={startDate}
               onChange={(date) =>
                 setIssue({
@@ -246,12 +219,9 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
               endDate={endDate}
               minDate={new Date()}
               value={startDate}
-              isInvalid={errorStartDate}
+              error={errorStartDate}
               selectsStart
             />
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errorStartDate}
-            </Form.Control.Feedback>
           </Col>
 
           <Col sm={6}>
@@ -262,8 +232,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
                 </Form.Label>
               </Col>
               <Col sm={9}>
-                <DatePicker
-                  type="date"
+                <DateInput
                   selected={endDate}
                   onChange={(date) =>
                     setIssue({
@@ -271,99 +240,81 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
                       endDate: date,
                     })
                   }
+                  name="endDate"
                   startDate={startDate}
                   endDate={endDate}
                   minDate={startDate}
-                  name="endDate"
                   value={endDate}
-                  placeholder="Enter End Date"
-                  isInvalid={errorEndDate}
+                  error={errorEndDate}
                   selectsEnd
                 />
-                <Form.Control.Feedback type="invalid" className="d-block">
-                  {errorEndDate}
-                </Form.Control.Feedback>
               </Col>
             </Row>
           </Col>
         </Form.Group>
 
+        {/* priority form input field */}
         <Form.Group as={Row} className="mb-3">
           <Col sm={3}>
             <Form.Label>Priority</Form.Label>
           </Col>
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="High"
-              value="high"
-              name="priority"
-              checked={priority === 'high'}
-              onChange={handleChange}
-            />
-          </Col>
 
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="Medium"
-              value="medium"
-              name="priority"
-              checked={priority === 'medium'}
-              onChange={handleChange}
-            />
-          </Col>
+          <CheckInput
+            name="priority"
+            label="High"
+            value="high"
+            onChange={handleChange}
+            valueToCheck={priority}
+          />
 
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="Low"
-              value="low"
-              name="priority"
-              checked={priority === 'low'}
-              onChange={handleChange}
-            />
-          </Col>
+          <CheckInput
+            name="priority"
+            label="Medium"
+            value="medium"
+            onChange={handleChange}
+            valueToCheck={priority}
+          />
+
+          <CheckInput
+            name="priority"
+            label="Low"
+            value="low"
+            onChange={handleChange}
+            valueToCheck={priority}
+          />
         </Form.Group>
 
+        {/* status form input field */}
         <Form.Group as={Row} className="mb-3">
           <Col sm={3}>
             <Form.Label htmlFor="status">Status</Form.Label>
           </Col>
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="New"
-              value="new"
-              name="status"
-              checked={status === 'new'}
-              onChange={handleChange}
-            />
-          </Col>
+          <CheckInput
+            name="status"
+            label="New"
+            value="new"
+            onChange={handleChange}
+            valueToCheck={status}
+          />
 
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="In Progress"
-              value="inProgress"
-              name="status"
-              checked={status === 'inProgress'}
-              onChange={handleChange}
-            />
-          </Col>
+          <CheckInput
+            name="status"
+            label="In Progress"
+            value="inProgress"
+            onChange={handleChange}
+            valueToCheck={status}
+          />
 
-          <Col sm="auto">
-            <Form.Check
-              type="radio"
-              label="Completed"
-              value="completed"
-              name="status"
-              checked={status === 'completed'}
-              onChange={handleChange}
-            />
-          </Col>
+          <CheckInput
+            name="status"
+            label="Completed"
+            value="completed"
+            onChange={handleChange}
+            valueToCheck={status}
+          />
         </Form.Group>
 
+        {/* Range form input field */}
         <Form.Group as={Row} className="mb-3">
           <Col sm={3}>
             <Form.Label htmlFor="completeInPercent" column>
