@@ -2,6 +2,11 @@ import { Form, Col, Row, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const schema = yup.object({
   username: yup.string().required('username is required'),
@@ -16,6 +21,9 @@ const schema = yup.object({
 });
 
 const Register = () => {
+  const { saveAuthInfo } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -23,10 +31,25 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data) => {
-    //   send  data to backend
-    console.log(data);
+  const onSubmit = async (data) => {
+    const { username, email, password } = data;
+
+    try {
+      const res = await axios.post(
+        //   send  api req to server
+        'http://localhost:1337/api/auth/local/register',
+        { username, email, password }
+      );
+
+      saveAuthInfo(res.data);
+      toast.success('Registration Successful');
+      // on successful response navigate to issues route
+      navigate('/issues');
+    } catch (err) {
+      toast.error(err.response.data.error.message);
+    }
   };
+
   return (
     <>
       <h1 className="mt-4 mb-4 text-center">Register</h1>
