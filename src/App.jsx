@@ -9,6 +9,8 @@ import Issues from './Issues';
 import Home from './Home';
 import NotFound from './NotFound';
 import EditIssue from './EditIssue';
+import Register from './auth/Register';
+import Login from './auth/Login';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -130,6 +132,8 @@ function App() {
                     />
                   }
                 />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Container>
