@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
-import { ToastContainer } from 'react-toastify';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 import Navigation from './Navigation';
 import AddIssue from './AddIssue';
@@ -15,6 +22,48 @@ import Login from './auth/Login';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from './context/AuthContext';
+
+const AuthRequired = ({ children }) => {
+  const { user, userLoaded } = useContext(AuthContext);
+
+  if (userLoaded) {
+    if (!user) {
+      return <Navigate to="/login" state={{ from: location.pathname }} />;
+    } else {
+      return children;
+    }
+  } else {
+    return (
+      <div
+        style={{ display: 'grid', minHeight: '100vh', placeItems: 'center' }}
+      >
+        <Spinner animation="grow" size="lg" />
+      </div>
+    );
+  }
+};
+
+const PublicRoute = ({ children }) => {
+  const location = useLocation();
+  const { user, userLoaded } = useContext(AuthContext);
+
+  if (userLoaded) {
+    if (!user) {
+      return children;
+    } else {
+      return <Navigate to={location?.state?.from || '/issues'} />;
+    }
+  } else {
+    return (
+      <div
+        style={{ display: 'grid', minHeight: '100vh', placeItems: 'center' }}
+      >
+        <Spinner animation="grow" size="lg" />
+      </div>
+    );
+  }
+};
 
 function App() {
   const [issues, setIssues] = useState([
@@ -111,29 +160,54 @@ function App() {
             <Container>
               <Routes>
                 <Route path="/" index element={<Home />} />
-                <Route path="/add" element={<AddIssue addIssue={addIssue} />} />
+                <Route
+                  path="/add"
+                  element={
+                    <AuthRequired>
+                      <AddIssue addIssue={addIssue} />
+                    </AuthRequired>
+                  }
+                />
                 <Route
                   path="/edit/:id"
                   element={
-                    <EditIssue issues={issues} updateIssue={updateIssue} />
+                    <AuthRequired>
+                      <EditIssue issues={issues} updateIssue={updateIssue} />
+                    </AuthRequired>
                   }
                 />
                 <Route
                   path="/issues"
                   element={
-                    <Issues
-                      issues={issues}
-                      totalCount={totalCount}
-                      newCount={newCount}
-                      progressCount={progressCount}
-                      completedCount={completedCount}
-                      completeIssue={completeIssue}
-                      deleteIssue={deleteIssue}
-                    />
+                    <AuthRequired>
+                      <Issues
+                        issues={issues}
+                        totalCount={totalCount}
+                        newCount={newCount}
+                        progressCount={progressCount}
+                        completedCount={completedCount}
+                        completeIssue={completeIssue}
+                        deleteIssue={deleteIssue}
+                      />
+                    </AuthRequired>
                   }
                 />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/register"
+                  element={
+                    <PublicRoute>
+                      <Register />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute>
+                      <Login />
+                    </PublicRoute>
+                  }
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Container>

@@ -2,7 +2,7 @@ import { Form, Col, Row, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -17,6 +17,7 @@ const schema = yup.object({
 });
 
 const Login = () => {
+  const location = useLocation();
   const { saveAuthInfo } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ const Login = () => {
       saveAuthInfo(res.data);
       toast.success('Login Successful');
       // on successful response navigate to issues route
-      navigate('/issues');
+      navigate(location?.state?.from || './issues');
     } catch (err) {
       toast.error(err.response.data.error.message);
     }
@@ -48,7 +49,7 @@ const Login = () => {
 
   return (
     <>
-      <h1 className="mt-4 mb-4 text-center">Register</h1>
+      <h1 className="mt-4 mb-4 text-center">Login</h1>
       <Row>
         <Col sm={{ span: 8, offset: 2 }}>
           <Form onSubmit={handleSubmit(onSubmit)}>
