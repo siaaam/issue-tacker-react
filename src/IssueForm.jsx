@@ -259,29 +259,35 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
             <Form.Label>Priority</Form.Label>
           </Col>
 
-          <CheckInput
-            name="priority"
-            label="High"
-            value="high"
-            onChange={handleChange}
-            valueToCheck={priority}
-          />
-
-          <CheckInput
-            name="priority"
-            label="Medium"
-            value="medium"
-            onChange={handleChange}
-            valueToCheck={priority}
-          />
-
-          <CheckInput
-            name="priority"
-            label="Low"
-            value="low"
-            onChange={handleChange}
-            valueToCheck={priority}
-          />
+          {[
+            {
+              name: 'priority',
+              label: 'High',
+              value: 'high',
+              valueToCheck: priority,
+            },
+            {
+              name: 'priority',
+              label: 'Medium',
+              value: 'medium',
+              valueToCheck: priority,
+            },
+            {
+              name: 'priority',
+              label: 'Low',
+              value: 'low',
+              valueToCheck: priority,
+            },
+          ].map((elm, idx) => (
+            <CheckInput
+              key={idx}
+              name={elm.name}
+              label={elm.label}
+              value={elm.value}
+              onChange={handleChange}
+              valueToCheck={elm.valueToCheck}
+            />
+          ))}
         </Form.Group>
 
         {/* status form input field */}
@@ -289,29 +295,36 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
           <Col sm={3}>
             <Form.Label htmlFor="status">Status</Form.Label>
           </Col>
-          <CheckInput
-            name="status"
-            label="New"
-            value="new"
-            onChange={handleChange}
-            valueToCheck={status}
-          />
 
-          <CheckInput
-            name="status"
-            label="In Progress"
-            value="inProgress"
-            onChange={handleChange}
-            valueToCheck={status}
-          />
-
-          <CheckInput
-            name="status"
-            label="Completed"
-            value="completed"
-            onChange={handleChange}
-            valueToCheck={status}
-          />
+          {[
+            {
+              name: 'status',
+              label: 'New',
+              value: 'new',
+              valueToCheck: status,
+            },
+            {
+              name: 'status',
+              label: 'In Progress',
+              value: 'inProgress',
+              valueToCheck: status,
+            },
+            {
+              name: 'status',
+              label: 'Completed',
+              value: 'completed',
+              valueToCheck: status,
+            },
+          ].map((elm, idx) => (
+            <CheckInput
+              key={idx}
+              name={elm.name}
+              label={elm.label}
+              value={elm.value}
+              onChange={handleChange}
+              valueToCheck={elm.valueToCheck}
+            />
+          ))}
         </Form.Group>
 
         {/* Range form input field */}
