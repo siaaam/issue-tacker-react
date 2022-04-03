@@ -163,6 +163,49 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
     startDate: errorStartDate,
     endDate: errorEndDate,
   } = errors;
+
+  const statusValues = [
+    {
+      name: 'status',
+      label: 'New',
+      value: 'new',
+      valueToCheck: status,
+    },
+    {
+      name: 'status',
+      label: 'In Progress',
+      value: 'inProgress',
+      valueToCheck: status,
+    },
+    {
+      name: 'status',
+      label: 'Completed',
+      value: 'completed',
+      valueToCheck: status,
+    },
+  ];
+
+  const priorityValues = [
+    {
+      name: 'priority',
+      label: 'High',
+      value: 'high',
+      valueToCheck: priority,
+    },
+    {
+      name: 'priority',
+      label: 'Medium',
+      value: 'medium',
+      valueToCheck: priority,
+    },
+    {
+      name: 'priority',
+      label: 'Low',
+      value: 'low',
+      valueToCheck: priority,
+    },
+  ];
+
   return (
     <>
       <h1 className="mt-4 mb-4">{issueToEdit ? 'Edit Issue' : 'Add Issue'}</h1>
@@ -259,26 +302,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
             <Form.Label>Priority</Form.Label>
           </Col>
 
-          {[
-            {
-              name: 'priority',
-              label: 'High',
-              value: 'high',
-              valueToCheck: priority,
-            },
-            {
-              name: 'priority',
-              label: 'Medium',
-              value: 'medium',
-              valueToCheck: priority,
-            },
-            {
-              name: 'priority',
-              label: 'Low',
-              value: 'low',
-              valueToCheck: priority,
-            },
-          ].map((elm, idx) => (
+          {priorityValues.map((elm, idx) => (
             <CheckInput
               key={idx}
               name={elm.name}
@@ -296,26 +320,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
             <Form.Label htmlFor="status">Status</Form.Label>
           </Col>
 
-          {[
-            {
-              name: 'status',
-              label: 'New',
-              value: 'new',
-              valueToCheck: status,
-            },
-            {
-              name: 'status',
-              label: 'In Progress',
-              value: 'inProgress',
-              valueToCheck: status,
-            },
-            {
-              name: 'status',
-              label: 'Completed',
-              value: 'completed',
-              valueToCheck: status,
-            },
-          ].map((elm, idx) => (
+          {statusValues.map((elm, idx) => (
             <CheckInput
               key={idx}
               name={elm.name}
