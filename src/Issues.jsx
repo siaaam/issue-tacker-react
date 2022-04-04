@@ -1,9 +1,10 @@
+import { useContext } from 'react';
 import { Table } from 'react-bootstrap';
+import { IssueContext } from './context/IssueContext';
 import Issue from './Issue';
 import IssueBar from './IssueBar';
 
 const Issues = ({
-  issues,
   totalCount,
   newCount,
   progressCount,
@@ -11,6 +12,8 @@ const Issues = ({
   completeIssue,
   deleteIssue,
 }) => {
+  const { issues } = useContext(IssueContext);
+
   return (
     <>
       <h1 className="mt-4 mb-4">All Issues</h1>

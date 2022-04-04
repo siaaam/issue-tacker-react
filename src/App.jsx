@@ -85,22 +85,22 @@ function App() {
   const [progressCount, setProgressCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
 
-  const addIssue = (issue) => {
-    setIssues([...issues, issue]);
+  // const addIssue = (issue) => {
+  //   setIssues([...issues, issue]);
 
-    setTotalCount((prevCount) => prevCount + 1);
+  //   setTotalCount((prevCount) => prevCount + 1);
 
-    if (issue.status === 'new') {
-      setNewCount((prevCount) => prevCount + 1);
-    }
+  //   if (issue.status === 'new') {
+  //     setNewCount((prevCount) => prevCount + 1);
+  //   }
 
-    if (issue.status === 'inProgress') {
-      setProgressCount((prevCount) => prevCount + 1);
-    }
-    if (issue.status === 'completed') {
-      setCompletedCount((prevCount) => prevCount + 1);
-    }
-  };
+  //   if (issue.status === 'inProgress') {
+  //     setProgressCount((prevCount) => prevCount + 1);
+  //   }
+  //   if (issue.status === 'completed') {
+  //     setCompletedCount((prevCount) => prevCount + 1);
+  //   }
+  // };
 
   const completeIssue = (id) => {
     // find the issue based on id  and modify as  necessary
@@ -164,7 +164,7 @@ function App() {
                   path="/add"
                   element={
                     <AuthRequired>
-                      <AddIssue addIssue={addIssue} />
+                      <AddIssue />
                     </AuthRequired>
                   }
                 />
@@ -181,7 +181,6 @@ function App() {
                   element={
                     <AuthRequired>
                       <Issues
-                        issues={issues}
                         totalCount={totalCount}
                         newCount={newCount}
                         progressCount={progressCount}
