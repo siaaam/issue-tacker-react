@@ -1,5 +1,10 @@
 import { createContext, useReducer } from 'react';
-import { ADD_ISSUE, DELETE_ISSUE, UPDATE_ISSUE } from '../actions';
+import {
+  ADD_ISSUE,
+  COMPLETE_ISSUE,
+  DELETE_ISSUE,
+  UPDATE_ISSUE,
+} from '../actions';
 import issueReducer from '../issueReducer';
 export const IssueContext = createContext();
 
@@ -47,11 +52,17 @@ export const IssueProvider = ({ children }) => {
     dispatch({ type: UPDATE_ISSUE, payload: issueToUpdate });
   };
 
+  const completeIssue = (id) => {
+    dispatch({ type: COMPLETE_ISSUE, payload: id });
+    // find the issue based on id  and modify as  necessary
+  };
+
   const value = {
     issues,
     deleteIssue,
     updateIssue,
     addIssue,
+    completeIssue,
   };
   return (
     <IssueContext.Provider value={value}>{children}</IssueContext.Provider>

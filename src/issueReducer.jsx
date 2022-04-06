@@ -1,4 +1,9 @@
-import { ADD_ISSUE, DELETE_ISSUE, UPDATE_ISSUE } from './actions';
+import {
+  ADD_ISSUE,
+  COMPLETE_ISSUE,
+  DELETE_ISSUE,
+  UPDATE_ISSUE,
+} from './actions';
 
 const issueReducer = (state, action) => {
   const { type, payload } = action;
@@ -23,6 +28,21 @@ const issueReducer = (state, action) => {
         }
       });
       return [...issuesAfterUpdate];
+
+    case COMPLETE_ISSUE:
+      const issuesAfterCompletion = state.map((issue) => {
+        if (issue.id === payload) {
+          return {
+            ...issue,
+            status: 'completed',
+            completeInPercent: '100',
+          };
+        } else {
+          return issue;
+        }
+      });
+
+      return [...issuesAfterCompletion];
 
     default:
       return state;

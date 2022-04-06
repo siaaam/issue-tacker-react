@@ -1,8 +1,9 @@
 import IssueForm from './IssueForm';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { IssueContext } from './context/IssueContext';
 
 const defaultIssue = {
   title: '',
@@ -15,8 +16,9 @@ const defaultIssue = {
   completeInPercent: '20',
 };
 
-const EditIssue = ({ issues, updateIssue }) => {
+const EditIssue = () => {
   const [issue, setIssue] = useState(defaultIssue);
+  const { issues, updateIssue } = useContext(IssueContext);
   const navigate = useNavigate();
   const { id } = useParams();
 

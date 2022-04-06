@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Badge, ProgressBar, Modal, Button } from 'react-bootstrap';
 import { FaTrashAlt, FaEdit, FaCheckSquare } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { IssueContext } from './context/IssueContext';
 
-const Issue = ({ issue, completeIssue, deleteIssue }) => {
+const Issue = ({ issue }) => {
   const { id, title, priority, status, endDate, assignTo, completeInPercent } =
     issue;
+
+  const { deleteIssue, completeIssue } = useContext(IssueContext);
 
   const navigate = useNavigate();
   const [show, setShow] = useState(false);

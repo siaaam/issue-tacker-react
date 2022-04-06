@@ -4,14 +4,7 @@ import { IssueContext } from './context/IssueContext';
 import Issue from './Issue';
 import IssueBar from './IssueBar';
 
-const Issues = ({
-  totalCount,
-  newCount,
-  progressCount,
-  completedCount,
-  completeIssue,
-  deleteIssue,
-}) => {
+const Issues = ({ totalCount, newCount, progressCount, completedCount }) => {
   const { issues } = useContext(IssueContext);
 
   return (
@@ -40,12 +33,7 @@ const Issues = ({
         </thead>
         <tbody>
           {issues.map((issue) => (
-            <Issue
-              key={issue.id}
-              issue={issue}
-              completeIssue={completeIssue}
-              deleteIssue={deleteIssue}
-            />
+            <Issue key={issue.id} issue={issue} />
           ))}
         </tbody>
       </Table>
