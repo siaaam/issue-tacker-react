@@ -37,11 +37,6 @@ export const IssueProvider = ({ children }) => {
           },
         },
       });
-      // const res = await axios.get('http://localhost:1337/api/issues', {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
 
       const issues = formatIssues(data.data);
       dispatch({ type: GET_ISSUES, payload: issues });
@@ -98,8 +93,25 @@ export const IssueProvider = ({ children }) => {
     // navigate('/issues');
   };
 
-  const deleteIssue = (id) => {
-    dispatch({ type: DELETE_ISSUE, payload: id });
+  const deleteIssue = async (id) => {
+    try {
+      await axiosAPI({
+        method: 'delete',
+        url: `/issues/${id}`,
+
+        config: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+
+      dispatch({ type: DELETE_ISSUE, payload: id });
+      // toast.success('Issue deleted successfully');
+    } catch (err) {
+      console.log(err);
+      console.log(err.response);
+    }
   };
 
   const updateIssue = (issueToUpdate) => {
