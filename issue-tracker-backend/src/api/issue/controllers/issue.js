@@ -18,4 +18,36 @@ module.exports = createCoreController("api::issue.issue", ({ strapi }) => ({
 
     return response;
   },
+
+  async delete(ctx) {
+    // some logic here
+    const authorID = ctx.state.user.id;
+    const { id } = ctx.params;
+
+    // check author id
+    // compare author
+    const foundIssue = await strapi.entityService.findOne(
+      "api::issue.issue",
+      +id,
+      {
+        populate: "author",
+      }
+    );
+    console.log(foundIssue);
+
+    if (!foundIssue) {
+      ctx.notFound("Issue is not found to be deleted");
+    }
+
+    if (foundIssue && foundIssue.author.id !== authorID) {
+      // not the owner
+      return ctx.unAuthorized("You are not owner of the issue");
+    }
+
+    console.log(authorID, id);
+    const response = await super.delete(ctx);
+    // some more logic
+
+    return response;
+  },
 }));
