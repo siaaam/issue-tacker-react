@@ -139,9 +139,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
       // form submission
       addIssue({
         ...issue,
-        id: uuid(),
       });
-      toast.success('Issue added successfully');
       navigate('/issues');
     }
   };

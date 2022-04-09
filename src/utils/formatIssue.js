@@ -1,6 +1,6 @@
 const formatIssue = (data) => {
   return {
-    id: issue.id,
+    id: data.id,
     ...data.attributes,
   };
 };

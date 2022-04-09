@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 import {
   ADD_ISSUE,
   COMPLETE_ISSUE,
@@ -10,6 +10,9 @@ import issueReducer from '../issueReducer';
 import useToken from '../hooks/useToken';
 import axios from 'axios';
 import formatIssues from '../utils/formatIssues';
+import { toast } from 'react-toastify';
+import formatIssue from '../utils/formatIssue';
+// import { AuthContext } from './AuthContext';
 
 export const IssueContext = createContext();
 
@@ -19,6 +22,9 @@ export const IssueProvider = ({ children }) => {
   const [issues, dispatch] = useReducer(issueReducer, initialState);
 
   const { token, tokenLoaded } = useToken();
+
+  // const { user } = useContext(AuthContext);
+  // console.log(user);
 
   const loadIssues = async () => {
     try {
@@ -43,8 +49,40 @@ export const IssueProvider = ({ children }) => {
     }
   }, [tokenLoaded, token]);
 
-  const addIssue = (issue) => {
-    dispatch({ type: ADD_ISSUE, payload: issue });
+  const addIssue = async (issue) => {
+    const formattedIssue = {
+      ...issue,
+      assigned_to: issue.assignedTo,
+      sub_title: issue.subTitle,
+      start_date: issue.startDate,
+      end_date: issue.endDate,
+      completed_percentage: issue.completedPercentage,
+    };
+    // at first send data to the server
+    try {
+      const res = await axios.post(
+        'http://localhost:1337/api/issues',
+        { data: formattedIssue },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const addedIssue = formatIssue(res.data.data);
+
+      console.log(addedIssue);
+      // const issues = formatIssues(res.data.data);
+      dispatch({ type: ADD_ISSUE, payload: addedIssue });
+      toast.success('Issue added successfully');
+    } catch (err) {
+      console.log(err);
+      console.log(err.response);
+    }
+    // then get the data back
+
+    // navigate('/issues');
   };
 
   const deleteIssue = (id) => {
