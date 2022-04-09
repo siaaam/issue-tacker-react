@@ -27,21 +27,6 @@ export const IssueProvider = ({ children }) => {
 
   const addIssue = (issue) => {
     dispatch({ type: ADD_ISSUE, payload: issue });
-
-    // setIssues((prevIssues) => [...prevIssues, issue]);
-
-    // setTotalCount((prevCount) => prevCount + 1);
-
-    // if (issue.status === 'new') {
-    //   setNewCount((prevCount) => prevCount + 1);
-    // }
-
-    // if (issue.status === 'inProgress') {
-    //   setProgressCount((prevCount) => prevCount + 1);
-    // }
-    // if (issue.status === 'completed') {
-    //   setCompletedCount((prevCount) => prevCount + 1);
-    // }
   };
 
   const deleteIssue = (id) => {
