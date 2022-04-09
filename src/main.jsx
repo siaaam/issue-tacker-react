@@ -7,11 +7,11 @@ import { IssueProvider } from './context/IssueContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <IssueProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <IssueProvider>
         <App />
-      </AuthProvider>
-    </IssueProvider>
+      </IssueProvider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
