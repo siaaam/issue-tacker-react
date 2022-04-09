@@ -12,7 +12,7 @@ import axios from 'axios';
 import formatIssues from '../utils/formatIssues';
 import { toast } from 'react-toastify';
 import formatIssue from '../utils/formatIssue';
-// import { AuthContext } from './AuthContext';
+import { AuthContext } from './AuthContext';
 
 export const IssueContext = createContext();
 
@@ -23,8 +23,7 @@ export const IssueProvider = ({ children }) => {
 
   const { token, tokenLoaded } = useToken();
 
-  // const { user } = useContext(AuthContext);
-  // console.log(user);
+  const { user } = useContext(AuthContext);
 
   const loadIssues = async () => {
     try {
@@ -52,27 +51,29 @@ export const IssueProvider = ({ children }) => {
   const addIssue = async (issue) => {
     const formattedIssue = {
       ...issue,
-      assigned_to: issue.assignedTo,
+      assign_to: 1,
+      author: user.id,
       sub_title: issue.subTitle,
       start_date: issue.startDate,
       end_date: issue.endDate,
-      completed_percentage: issue.completedPercentage,
+      completed_percentage: issue.completeInPercent,
     };
+
     // at first send data to the server
     try {
-      const res = await axios.post(
-        'http://localhost:1337/api/issues',
-        { data: formattedIssue },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios({
+        method: 'post',
+        url: 'http://localhost:1337/api/issues?populate=*',
+        data: {
+          data: formattedIssue,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const addedIssue = formatIssue(res.data.data);
 
-      console.log(addedIssue);
       // const issues = formatIssues(res.data.data);
       dispatch({ type: ADD_ISSUE, payload: addedIssue });
       toast.success('Issue added successfully');
