@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoaded, setUserLoaded] = useState(false);
 
-  const { token, loaded } = useToken();
+  const { token, tokenLoaded } = useToken();
 
   async function loadUser() {
     try {
@@ -33,10 +33,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (loaded) {
+    if (tokenLoaded) {
       loadUser();
     }
-  }, [loaded]);
+  }, [tokenLoaded]);
 
   const saveAuthInfo = (info) => {
     //save jwt in local storage

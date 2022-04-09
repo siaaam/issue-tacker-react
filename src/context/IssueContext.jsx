@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import {
   ADD_ISSUE,
   COMPLETE_ISSUE,
@@ -6,6 +6,10 @@ import {
   UPDATE_ISSUE,
 } from '../actions';
 import issueReducer from '../issueReducer';
+import useToken from '../hooks/useToken';
+import axios from 'axios';
+import formatIssues from '../utils/formatIssues';
+
 export const IssueContext = createContext();
 
 const initialState = [
@@ -24,6 +28,31 @@ const initialState = [
 
 export const IssueProvider = ({ children }) => {
   const [issues, dispatch] = useReducer(issueReducer, initialState);
+
+  const { token, tokenLoaded } = useToken();
+
+  const loadIssues = async () => {
+    try {
+      const res = await axios.get('http://localhost:1337/api/issues', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const issues = formatIssues(res.data.data);
+      console.log(issues);
+    } catch (err) {
+      console.log(err);
+      console.log(err.response);
+    }
+  };
+
+  useEffect(() => {
+    if (tokenLoaded && token) {
+      // load issues from server
+      loadIssues();
+    }
+  }, [tokenLoaded, token]);
 
   const addIssue = (issue) => {
     dispatch({ type: ADD_ISSUE, payload: issue });

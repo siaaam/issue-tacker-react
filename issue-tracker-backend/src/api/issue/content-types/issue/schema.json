@@ -60,11 +60,6 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
-    },
-    "slug": {
-      "type": "uid",
-      "targetField": "title",
-      "required": false
     }
   }
 }
