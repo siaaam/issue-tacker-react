@@ -3,6 +3,7 @@ import {
   ADD_ISSUE,
   COMPLETE_ISSUE,
   DELETE_ISSUE,
+  GET_ISSUES,
   UPDATE_ISSUE,
 } from '../actions';
 import issueReducer from '../issueReducer';
@@ -12,19 +13,7 @@ import formatIssues from '../utils/formatIssues';
 
 export const IssueContext = createContext();
 
-const initialState = [
-  {
-    id: 'da46d4ea-c718-4c8a-b661-f8761848e2f2',
-    title: 'sample issue',
-    subTitle: 'task details',
-    assignTo: 'no  one',
-    startDate: new Date(),
-    endDate: new Date(),
-    priority: 'high',
-    status: 'new',
-    completeInPercent: '70',
-  },
-];
+const initialState = [];
 
 export const IssueProvider = ({ children }) => {
   const [issues, dispatch] = useReducer(issueReducer, initialState);
@@ -40,7 +29,7 @@ export const IssueProvider = ({ children }) => {
       });
 
       const issues = formatIssues(res.data.data);
-      console.log(issues);
+      dispatch({ type: GET_ISSUES, payload: issues });
     } catch (err) {
       console.log(err);
       console.log(err.response);
