@@ -17,7 +17,6 @@ const Issue = ({ issue }) => {
   const handleClose = (e) => {
     if (e.target.dataset.action === 'delete') {
       deleteIssue(id);
-      toast.warn('Issue is deleted successfully');
     }
 
     setShow(false);

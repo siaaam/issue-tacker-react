@@ -9,7 +9,10 @@ import { addDays } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import TextInput from './formInputs/TextInput';
 import DateInput from './formInputs/DateInput';
+import SelectInput from './formInputs/SelectInput';
 import CheckInput from './formInputs/CheckInput';
+import useToken from './hooks/useToken';
+import axiosAPI from './utils/axiosAPI';
 
 // const defaultIssue = {
 //   title: '',
@@ -33,6 +36,36 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
     status: 'new',
     completeInPercent: '20',
   });
+
+  const [users, setUsers] = useState(null);
+  const [loadUsersState, setLoadUsersState] = useState(false);
+
+  const { token, tokenLoaded } = useToken();
+
+  const loadUsers = async () => {
+    const data = await axiosAPI({
+      method: 'get',
+      url: '/users',
+      config: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+
+    const users = data.map((user) => ({
+      id: user.id,
+      username: user.username,
+    }));
+
+    setUsers(users);
+  };
+
+  useEffect(() => {
+    if (token && tokenLoaded) {
+      loadUsers();
+    }
+  }, [token, tokenLoaded]);
 
   useEffect(() => {
     if (issueToEdit) {
@@ -130,7 +163,6 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
       updateIssue({
         ...issue,
       });
-      toast.success('Issue updated successfully');
       navigate('/issues');
       return;
     }
@@ -229,7 +261,17 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
           as="textarea"
         />
 
-        <TextInput
+        <SelectInput
+          label="Assign To"
+          name="assignTo"
+          onChange={handleChange}
+          value={assignTo}
+          error={assignToErr}
+          users={users}
+          setLoadUsersState={setLoadUsersState}
+        />
+
+        {/* <TextInput
           label="Assign To"
           type="text"
           name="assignTo"
@@ -237,7 +279,7 @@ const IssueForm = ({ addIssue, updateIssue, issue: issueToEdit }) => {
           value={assignTo}
           placeholder="Enter Name Whom You Have Assign To"
           error={assignToErr}
-        />
+        /> */}
 
         <Form.Group as={Row} className="mb-3">
           <Col sm={3}>

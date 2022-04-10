@@ -56,7 +56,7 @@ export const IssueProvider = ({ children }) => {
   const addIssue = async (issue) => {
     const formattedIssue = {
       ...issue,
-      assign_to: 1,
+      assign_to: issue.assignTo,
       author: user.id,
       sub_title: issue.subTitle,
       start_date: issue.startDate,
@@ -68,7 +68,7 @@ export const IssueProvider = ({ children }) => {
     try {
       const data = await axiosAPI({
         method: 'post',
-        url: '/issues?populate=*',
+        url: '/issues',
         data: {
           data: formattedIssue,
         },
@@ -109,13 +109,46 @@ export const IssueProvider = ({ children }) => {
       dispatch({ type: DELETE_ISSUE, payload: id });
       // toast.success('Issue deleted successfully');
     } catch (err) {
-      console.log(err);
-      console.log(err.response);
+      toast.error(err.response.data?.error?.message);
     }
   };
 
-  const updateIssue = (issueToUpdate) => {
-    dispatch({ type: UPDATE_ISSUE, payload: issueToUpdate });
+  const updateIssue = async (issueToUpdate) => {
+    const formattedIssue = {
+      ...issueToUpdate,
+      assign_to: issueToUpdate.assignTo,
+      author: user.id,
+      sub_title: issueToUpdate.subTitle,
+      start_date: issueToUpdate.startDate,
+      end_date: issueToUpdate.endDate,
+      completed_percentage: issueToUpdate.completeInPercent,
+    };
+
+    // at first send data to the server
+    try {
+      const { data } = await axiosAPI({
+        method: 'put',
+        url: `/issues/${issueToUpdate.id}`,
+        data: {
+          data: formattedIssue,
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+
+      const updatedIssue = formatIssue(data);
+
+      dispatch({ type: UPDATE_ISSUE, payload: updatedIssue });
+      toast.success('Issue updated successfully');
+
+      // const issues = formatIssues(res.data.data);
+      // dispatch({ type: ADD_ISSUE, payload: addedIssue });
+    } catch (err) {
+      toast.error(err.response.data?.error?.message);
+    }
   };
 
   const completeIssue = (id) => {

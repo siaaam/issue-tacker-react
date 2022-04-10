@@ -30,7 +30,7 @@ const EditIssue = () => {
   const issueToEdit = async () => {
     const data = await axiosAPI({
       method: 'get',
-      url: `/issues/${+id}`,
+      url: `/issues/${+id}?populate=assign_to`,
       config: {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,7 +39,6 @@ const EditIssue = () => {
     });
 
     const issue = formatIssue(data.data);
-    console.log(issue);
 
     // const foundIssue = issues.find((issue) => issue.id === id);
     // if (!foundIssue) {
@@ -50,7 +49,7 @@ const EditIssue = () => {
       ...issue,
       startDate: parseISO(issue.startDate),
       endDate: parseISO(issue.endDate),
-      assignTo: '...',
+      assignTo: issue.assign_to.data.id,
     });
   };
 
