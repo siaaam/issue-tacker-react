@@ -73,4 +73,29 @@ module.exports = createCoreController("api::issue.issue", ({ strapi }) => ({
 
     return response;
   },
+
+  async completedIssue(ctx) {
+    const loggedInUserID = ctx.state.user.id;
+    const { id } = ctx.params;
+
+    const foundIssue = await strapi.entityService.findOne(
+      "api::issue.issue",
+      +id,
+      {
+        populate: "assign_to",
+      }
+    );
+
+    console.log(foundIssue);
+
+    if (foundIssue.assign_to.id !== loggedInUserID) {
+      // not the owner
+      return ctx.unauthorized("You are not authorized to complete the issue");
+    }
+
+    const response = await super.update(ctx);
+    // some more logic
+
+    return response;
+  },
 }));

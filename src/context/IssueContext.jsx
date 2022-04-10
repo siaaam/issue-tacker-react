@@ -151,8 +151,37 @@ export const IssueProvider = ({ children }) => {
     }
   };
 
-  const completeIssue = (id) => {
-    dispatch({ type: COMPLETE_ISSUE, payload: id });
+  const completeIssue = async (id) => {
+    const updatedData = {
+      status: 'completed',
+      completed_percentage: 100,
+    };
+
+    // at first send data to the server
+    try {
+      const { data } = await axiosAPI({
+        method: 'put',
+        url: `/issues/completed/${id}`,
+        data: {
+          data: updatedData,
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+
+      dispatch({ type: COMPLETE_ISSUE, payload: data.id });
+      toast.success('Issue completed successfully');
+
+      // const issues = formatIssues(res.data.data);
+      // dispatch({ type: ADD_ISSUE, payload: addedIssue });
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data?.error?.message);
+    }
+
     // find the issue based on id  and modify as  necessary
   };
 
