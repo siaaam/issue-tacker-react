@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+
 import {
   ADD_ISSUE,
   COMPLETE_ISSUE,
@@ -14,6 +21,7 @@ import { toast } from 'react-toastify';
 import formatIssue from '../utils/formatIssue';
 import { AuthContext } from './AuthContext';
 import axiosAPI from '../utils/axiosAPI';
+import qs from 'qs';
 
 export const IssueContext = createContext();
 
@@ -24,13 +32,28 @@ export const IssueProvider = ({ children }) => {
 
   const { token, tokenLoaded } = useToken();
 
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(null);
+
   const { user } = useContext(AuthContext);
 
   const loadIssues = async () => {
+    const query = qs.stringify(
+      {
+        pagination: {
+          page: pageNumber,
+          pageSize: import.meta.env.VITE_PAGE_SIZE,
+        },
+      },
+      {
+        encodeValuesOnly: true,
+      }
+    );
+
     try {
-      const data = await axiosAPI({
+      const { data, meta } = await axiosAPI({
         method: 'get',
-        url: '/issues',
+        url: `/issues?${query}`,
         config: {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -38,7 +61,8 @@ export const IssueProvider = ({ children }) => {
         },
       });
 
-      const issues = formatIssues(data.data);
+      const issues = formatIssues(data);
+      setPageCount(meta.pagination.pageCount);
       dispatch({ type: GET_ISSUES, payload: issues });
     } catch (err) {
       console.log(err);
@@ -51,7 +75,7 @@ export const IssueProvider = ({ children }) => {
       // load issues from server
       loadIssues();
     }
-  }, [tokenLoaded, token]);
+  }, [tokenLoaded, token, pageNumber]);
 
   const addIssue = async (issue) => {
     const formattedIssue = {
@@ -191,6 +215,9 @@ export const IssueProvider = ({ children }) => {
     updateIssue,
     addIssue,
     completeIssue,
+    pageCount,
+    pageNumber,
+    setPageNumber,
   };
   return (
     <IssueContext.Provider value={value}>{children}</IssueContext.Provider>
