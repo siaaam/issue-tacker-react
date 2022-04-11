@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const isProduction = import.meta.env.PROD;
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_PRODUCTION_URL,
+  baseURL: isProduction
+    ? import.meta.env.VITE_PRODUCTION_URL
+    : import.meta.env.VITE_DEVELOPMENT_URL,
 });
 
 const axiosAPI = async ({ method, url, data, config = {} }) => {
